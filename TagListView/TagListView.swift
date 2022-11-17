@@ -269,24 +269,29 @@ open class TagListView: UIView {
         let directionTransform = isRtl
             ? CGAffineTransform(scaleX: -1.0, y: 1.0)
             : CGAffineTransform.identity
-        
+        var lastRowView: UIView?
         for (index, tagView) in tagViews.enumerated() {
+            tagView.maxWidth = frameWidth - paddingX * 2
             tagView.frame.size = tagView.intrinsicContentSize
             tagViewHeight = tagView.frame.height
-            
             if currentRowTagCount == 0 || currentRowWidth + tagView.frame.width > frameWidth {
                 currentRow += 1
                 currentRowWidth = 0
                 currentRowTagCount = 0
                 currentRowView = UIView()
                 currentRowView.transform = directionTransform
-                currentRowView.frame.origin.y = CGFloat(currentRow - 1) * (tagViewHeight + marginY)
+                if let lastRowView = lastRowView {
+                    currentRowView.frame.origin.y = lastRowView.frame.maxY + marginY
+                }else {
+                    currentRowView.frame.origin.y = CGFloat(currentRow - 1) * (tagViewHeight + marginY)
+                }
                 
                 rowViews.append(currentRowView)
                 addSubview(currentRowView)
 
                 tagView.frame.size.width = min(tagView.frame.size.width, frameWidth)
             }
+            lastRowView = currentRowView
             
             let tagBackgroundView = tagBackgroundViews[index]
             tagBackgroundView.transform = directionTransform
@@ -327,9 +332,14 @@ open class TagListView: UIView {
     // MARK: - Manage tags
     
     override open var intrinsicContentSize: CGSize {
-        var height = CGFloat(rows) * (tagViewHeight + marginY)
-        if rows > 0 {
-            height -= marginY
+        var height: CGFloat
+        if let maxY = rowViews.last?.frame.maxY {
+            height = maxY
+        }else {
+            height = rowViews.last?.frame.maxY ?? CGFloat(rows) * (tagViewHeight + marginY)
+            if rows > 0 {
+                height -= marginY
+            }
         }
         return CGSize(width: frame.width, height: height)
     }

@@ -17,42 +17,45 @@ class ViewController: UIViewController, TagListViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tagListView.delegate = self
-        tagListView.addTag("TagListView")
-        tagListView.addTag("TEAChart")
-        tagListView.addTag("To Be Removed")
-        tagListView.addTag("To Be Removed")
-        tagListView.addTag("Quark Shell")
-        tagListView.removeTag("To Be Removed")
-        tagListView.addTag("On tap will be removed").onTap = { [weak self] tagView in
-            self?.tagListView.removeTagView(tagView)
-        }
+//        tagListView.delegate = self
+//        tagListView.addTag("TagListView")
+//        tagListView.addTag("TEAChart")
+//        tagListView.addTag("To Be Removed")
+//        tagListView.addTag("To Be Removed")
+//        tagListView.addTag("Quark ShellQuark ShellQuark ShellQuark ShellQuark ShellQuark ShellQuark ShellQuark ShellQuark ShellQuark Shell")
+//        tagListView.removeTag("To Be Removed")
+//        tagListView.addTag("On tap will be removed").onTap = { [weak self] tagView in
+//            self?.tagListView.removeTagView(tagView)
+//        }
         
-        let tagView = tagListView.addTag("gray")
-        tagView.tagBackgroundColor = UIColor.gray
-        tagView.onTap = { tagView in
-            print("Don’t tap me!")
-        }
-
-        tagListView.insertTag("This should be the third tag", at: 2)
-        
+//        let tagView = tagListView.addTag("gray")
+//        tagView.tagBackgroundColor = UIColor.gray
+//        tagView.onTap = { tagView in
+//            print("Don’t tap me!")
+//        }
+//
+//        tagListView.insertTag("This should be the third tag", at: 2)
+//
         biggerTagListView.delegate = self
         biggerTagListView.textFont = .systemFont(ofSize: 15)
         biggerTagListView.shadowRadius = 2
         biggerTagListView.shadowOpacity = 0.4
         biggerTagListView.shadowColor = UIColor.black
         biggerTagListView.shadowOffset = CGSize(width: 1, height: 1)
+        biggerTagListView.paddingX = 10
+        biggerTagListView.paddingY = 4
         biggerTagListView.addTag("Inboard")
         biggerTagListView.addTag("Pomotodo")
+        biggerTagListView.addTag("啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊")
         biggerTagListView.addTag("Halo Word")
-        biggerTagListView.alignment = .center
-        
+        biggerTagListView.alignment = .left
+
         biggestTagListView.delegate = self
         biggestTagListView.textFont = .systemFont(ofSize: 24)
         // it is also possible to add all tags in one go
         biggestTagListView.addTags(["all", "your", "tag", "are", "belong", "to", "us"])
         biggestTagListView.minWidth = 57
-        biggestTagListView.alignment = .right
+        biggestTagListView.alignment = .left
         
     }
     

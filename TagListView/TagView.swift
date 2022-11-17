@@ -163,7 +163,7 @@ open class TagView: UIButton {
     public init(title: String) {
         super.init(frame: CGRect.zero)
         setTitle(title, for: UIControl.State())
-        
+        titleLabel?.numberOfLines = 0
         setupView()
     }
     
@@ -183,10 +183,18 @@ open class TagView: UIButton {
     }
     
     // MARK: - layout
+    
+    var maxWidth: CGFloat?
 
     override open var intrinsicContentSize: CGSize {
-        var size = titleLabel?.text?.size(withAttributes: [NSAttributedString.Key.font: textFont]) ?? CGSize.zero
-        size.height = textFont.pointSize + paddingY * 2
+        let text = titleLabel?.text
+        var size = text?.size(withAttributes: [NSAttributedString.Key.font: textFont]) ?? CGSize.zero
+        size.height = text?.height(ofFont: textFont, maxWidth: maxWidth ?? CGFloat(CGFLOAT_MAX)) ?? 0
+        if size.height < textFont.pointSize {
+            size.height = textFont.pointSize + paddingY * 2
+        }else {
+            size.height = size.height + paddingY * 2
+        }
         size.width += paddingX * 2
         if size.width < size.height {
             size.width = size.height
@@ -226,3 +234,25 @@ private extension UIControl {
     typealias State = UIControlState
 }
 #endif
+
+extension String {
+    
+    func size(ofAttributes attributes: [NSAttributedString.Key: Any], maxWidth: CGFloat, maxHeight: CGFloat) -> CGSize {
+        let constraintRect = CGSize(width: maxWidth, height: maxHeight)
+        let boundingBox = self.boundingRect(
+            with: constraintRect,
+            options: .usesLineFragmentOrigin,
+            attributes: attributes,
+            context: nil
+        )
+        return boundingBox.size
+    }
+    
+    func height(ofFont font: UIFont, maxWidth: CGFloat) -> CGFloat {
+        size(
+            ofAttributes: [NSAttributedString.Key.font: font],
+            maxWidth: maxWidth,
+            maxHeight: CGFloat(MAXFLOAT)
+        ).height
+    }
+}
